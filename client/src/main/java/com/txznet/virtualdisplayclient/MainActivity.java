@@ -21,6 +21,11 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
+/**
+ * 客户端接入demo
+ * 注意：在实际开发中，如果涉及投屏的暂停和继续的话，建议不要直接销毁重建的对应的display
+ * 在少部分场景下，投屏实例的重复销毁创建，可能会造成部分异常
+ */
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -40,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
+
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -66,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
                 Log.e(TAG, "surfaceDestroyed: ");
+                // 投屏简单销毁方式可以直接release对应的display
                 if (virtualDisplay!=null){
                     virtualDisplay.release();
                     virtualDisplay=null;
@@ -74,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 根据服务端提供的对应的DISPLAY_NAME，来创建对应的虚拟屏幕
+     */
     private void createVirtualDisplay(){
         DisplayMetrics metrics=new DisplayMetrics();
         WindowManager windowManager=(WindowManager) getSystemService(Context.WINDOW_SERVICE);
@@ -98,6 +108,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 根据服务端提供对应投屏服务的action来绑定对应的服务
+     */
     private void bindDisplayService(){
         Intent intent=new Intent();
         intent.setAction(SERVICE_ACTION);
