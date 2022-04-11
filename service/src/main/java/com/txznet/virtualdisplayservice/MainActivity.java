@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // 投屏功能需要开启悬浮窗权限，如果投屏异常的话，需要第一时间检查权限是否满足要求
         if (PermissionUtils.checkFloatPermission(this)){
             startDisplayService();
         }else {
@@ -34,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
         startDisplayService();
     }
 
+    /**
+     * 启动对应的投屏服务
+     */
     private void startDisplayService(){
         Intent intent=new Intent();
         intent.setAction(SERVICE_ACTION);

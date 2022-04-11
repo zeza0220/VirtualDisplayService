@@ -5,6 +5,10 @@ import android.hardware.display.DisplayManager;
 import android.util.Log;
 import android.view.Display;
 
+/**
+ * 该类的主要作用为
+ * 获取client端创建的对应display
+ */
 public class DisplayHelper implements DisplayManager.DisplayListener {
     private static final String TAG = "DisplayHelper";
 
@@ -27,21 +31,33 @@ public class DisplayHelper implements DisplayManager.DisplayListener {
         displayManager=(DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
     }
 
+    /**
+     * 开始监听display的生成
+     */
     public void onResume(){
         getDisplayWithName();
         displayManager.registerDisplayListener(this,null);
     }
 
+    /**
+     * 暂停监听display的生成
+     */
     public void onPause(){
         getDisplayWithName();
         displayManager.unregisterDisplayListener(this);
     }
 
+    /**
+     * 主动获取投屏
+     */
     public void enable(){
         isEnable=true;
         getDisplayWithName();
     }
 
+    /**
+     * 主动停止投屏
+     */
     public void disable(){
         isEnable=false;
         if (hudDisplay!=null){
@@ -50,10 +66,17 @@ public class DisplayHelper implements DisplayManager.DisplayListener {
         }
     }
 
+    /**
+     * 是否正在投屏
+     * @return
+     */
     public boolean isEnable(){
         return isEnable;
     }
 
+    /**
+     * 根据对应的display_name获取对应display
+     */
     private synchronized void getDisplayWithName(){
         Display[] displays= getSystemDisplays(displayManager);
         Log.d(TAG, "getDisplayWithName: displays.length->"+displays.length);
@@ -91,7 +114,11 @@ public class DisplayHelper implements DisplayManager.DisplayListener {
         }
     }
 
-
+    /**
+     * 获取对应的displayManager
+     * @param displayManager
+     * @return
+     */
     public Display[] getSystemDisplays(DisplayManager displayManager){
         return displayManager.getDisplays("android.hardware.display.category.PRESENTATION");
     }

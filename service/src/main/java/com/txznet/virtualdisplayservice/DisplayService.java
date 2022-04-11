@@ -21,6 +21,10 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * 投屏服务（重点）
+ * 投屏的具体内容绘制
+ */
 public class DisplayService extends Service implements DisplayHelper.Listener {
     private static final String TAG = "DisplayService";
 
@@ -76,6 +80,11 @@ public class DisplayService extends Service implements DisplayHelper.Listener {
         super.onDestroy();
     }
 
+    /**
+     * 获取到对应的display后
+     * 往该display绘制对应的内容
+     * @param display 对应的display
+     */
     @Override
     public void showDisplay(Display display) {
         Log.d(TAG, "showDisplay: ");
@@ -108,11 +117,19 @@ public class DisplayService extends Service implements DisplayHelper.Listener {
         }
     };
 
+    /**
+     * 清楚绘制的内容
+     */
     @Override
     public void cleanDisplay() {
         removeView(textView);
     }
 
+    /**
+     * 获取该display的context
+     * @param display 对应的display
+     * @return
+     */
     private Context createHUDDisplayContext(Display display){
         Context disContext=createDisplayContext(display);
         final WindowManager wm=(WindowManager) disContext.getSystemService(Context.WINDOW_SERVICE);
@@ -123,6 +140,11 @@ public class DisplayService extends Service implements DisplayHelper.Listener {
             }
         };
     }
+
+    /**
+     * 获取display的宽高
+     * @param display
+     */
     private void setDisplay(Display display){
         DisplayMetrics displayMetrics=new DisplayMetrics();
         if (display!=null){
